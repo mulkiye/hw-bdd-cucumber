@@ -14,11 +14,10 @@ end
 
 # Make sure that one string (regexp) occurs before or after another one
 #   on the same page
-
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  assert page.body =~ /#{e1}.*#{e2}/m, "#{e1} was not before #{e2}"
+  expect(/[\s\S]*#{e1}[\s\S]*#{e2}/).to match(page.body)
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -33,5 +32,6 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
 end
 
 Then /I should see all the movies/ do
-
+  # Make sure that all the movies in the app are visible in the table
+  expect(page).to have_xpath("//tr", count: 11)
 end
